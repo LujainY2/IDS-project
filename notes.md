@@ -78,14 +78,62 @@ from PIL import Image
 import os
 import base64
 
-# --- Page Config ---
+# ------------------- Page Configuration ------------------- #
 st.set_page_config(page_title="Intrusion Detection", layout="wide")
 
-# --- Initialize Session State ---
-if "page" not in st.session_state:
-    st.session_state.page = "Main"
+# ------------------- Handle Page Switching ------------------- #
+query_params = st.query_params
+page = query_params.get("page", ["Main"])[0]
 
-# --- Set Sidebar Background Image ---
+# ------------------- Dynamic Navbar Styling ------------------- #
+main_active = "background-color: white; color: #36162E;" if page == "Main" else ""
+analysis_active = "background-color: white; color: #36162E;" if page == "Analysis" else ""
+
+st.markdown(f"""
+    <style>
+        .custom-navbar {{
+            background-color: #fdf5df;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #ccc;
+        }}
+        .navbar-title {{
+            color: #36162e;
+            font-size: 24px;
+            font-weight: bold;
+        }}
+        .navbar-tabs button {{
+            margin-left: 10px;
+            padding: 0.6rem 1.2rem;
+            background-color: #fdf5df;
+            color: #36162E;
+            border-radius: 8px;
+        }}
+        .navbar-tabs button:hover {{
+            margin-left: 10px;
+            border: 2px solid white;
+            border-radius: 8px;
+            padding: 0.5em 1em;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s ease-in-out;
+            backgroud-color:white;
+        }}
+    </style>
+    <div class="custom-navbar">
+        <div class="navbar-title">Intrusion Detection System</div>
+        <div class="navbar-tabs">
+            <form method="get">
+                <button type="submit" name="page" value="Main" style="{main_active}">Main</button>
+                <button type="submit" name="page" value="Analysis" style="{analysis_active}">Analysis</button>
+            </form>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
+
+# ------------------- Sidebar Background ------------------- #
 def set_sidebar_background(image_path):
     with open(image_path, "rb") as img_file:
         encoded_string = base64.b64encode(img_file.read()).decode()
@@ -96,116 +144,75 @@ def set_sidebar_background(image_path):
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
+            min-height: 100vh;
+            color:#36162e;
         }}
     </style>
     """
     st.markdown(sidebar_style, unsafe_allow_html=True)
 
-set_sidebar_background("streamlit_app/images/img.jpeg")
 
-# --- Custom CSS Styling ---
+set_sidebar_background("streamlit_app/images/img.jpeg")
+# Sidebar content
+st.sidebar.markdown("## CyberGuard: Intrusion Detection System using Machine Learning")
+st.sidebar.write("""Key Technologies:
+- **Machine Learning** for classification and threat detection
+- **Docker** for containerization
+- **Streamlit** for interactive web interface (frontend)
+- **fastAPI** for data handling (backend)
+- **Requests** to integrate with backend APIs for predictions
+
+### How It Works:
+- The user selects feature values from the network traffic data.
+- A machine learning model predicts whether the traffic is malicious or normal.
+- The system also provides visual analysis of attack patterns and network traffic characteristics.
+""")
+# ------------------- Custom CSS Styling ------------------- #
 st.markdown("""
     <style>
-        /* App background and main color */
         .stApp {
             background-color: #fdf5df;
             color: #36162E;
             font-weight: bold;
         }
-
-        /* Header styling */
-        .header-tabs {
-            background-color: #36162E;
-            padding: 16px;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+        h1, h2, h3 {
+            color: #594057;
         }
-        .header-tabs a {
-            text-decoration: none;
-            color: white;
-            border: 2px solid white;
-            padding: 10px 25px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            transition: 0.3s ease-in-out;
+        .stSlider label {
+            color: #F56A47 ;
+            font-weight: bold ;
         }
-        .header-tabs a:hover {
-            background-color: white;
-            color: #36162E;
+        .stSlider div[data-baseweb="slider"] > div > div[role="slider"] {
+            background-color: #F56A47 ;
         }
-        .header-tabs .active {
-            background-color: white;
-            color: #36162E;
-        }
-
-        /* Sidebar styling */
-        [data-testid="stSidebar"] {
-            background-color: #36162E !important;
-        }
-        .stSidebar .sidebar-content {
-            background-color: #36162E !important;
-            color: white;
-        }
-
-        /* Button styling */
         div.stButton > button {
-            background-color: white !important;
-            color: #36162E !important;
-            border: 2px solid #F56A47;
+            padding: 0.6rem 1.2rem;
+            background-color: #fdf5df;
+            color: #36162E;
             border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+        div.stButton > button:hover {
+            background-color: #fdf5df ;
+            color: #36162E ;
             padding: 0.5em 1em;
             font-weight: bold;
             font-size: 16px;
             transition: 0.3s ease-in-out;
-        }
-        div.stButton > button:hover {
-            background-color: #36162E !important;
-            color: white !important;
-        }
-
-        /* Slider label and thumb */
-        .stSlider label {
-            color: #F56A47 !important;
-            font-weight: bold !important;
-        }
-        .css-14g5mt7 .stSlider > div > div > div > div[role="slider"] {
-            background-color: #F56A47 !important;
-        }
-        .stSlider .css-1cpxqw2 {
-            color: #36162E !important;
-            font-weight: bold;
+            border: 2px solid white;
         }
     </style>
 """, unsafe_allow_html=True)
 
-# --- Header Navigation Bar ---
-current_page = st.session_state.page
-st.markdown(f"""
-    <div class="header-tabs">
-        <a class="{ 'active' if current_page == 'Main' else '' }" href="?page=Main">🔐 Main</a>
-        <a class="{ 'active' if current_page == 'Analysis' else '' }" href="?page=Analysis">📊 Analysis</a>
-    </div>
-""", unsafe_allow_html=True)
-
-# --- MAIN PAGE ---
-if current_page == "Main":
+# ------------------- Main Page ------------------- #
+if page == "Main":
     st.markdown("<h1 style='text-align: center;'>🔐 Intrusion Detection System</h1>", unsafe_allow_html=True)
-
     df = pd.read_csv("streamlit_app/features.csv")
     selected_features = [
-        "Bwd Pkt Len Mean",
-        "Pkt Len Max",
-        "ECE Flag Cnt",
-        "Init Fwd Win Byts",
-        "Init Bwd Win Byts",
-        "Fwd Act Data Pkts"
+        "Bwd Pkt Len Mean", "Pkt Len Max", "ECE Flag Cnt",
+        "Init Fwd Win Byts", "Init Bwd Win Byts", "Fwd Act Data Pkts"
     ]
-
     st.subheader("📊 Select Feature Values")
     feature_values = []
     for feature in selected_features:
@@ -222,28 +229,19 @@ if current_page == "Main":
         feature_values.append(value)
 
     if st.button("Classify"):
-        try:
             payload = {"features": feature_values}
             response = requests.post("http://backend:8000/predict", json=payload)
             result = response.json()
             st.success(f"The Response from the API = **{result['predicted_class']}**")
-        except Exception as e:
-            st.error(f"Something went wrong: {e}")
 
-# --- ANALYSIS PAGE ---
-elif current_page == "Analysis":
+# ------------------- Analysis Page ------------------- #
+elif page == "Analysis":
     st.markdown("<h1 style='text-align: center;'>📊 Analysis</h1>", unsafe_allow_html=True)
-
     image_files = [
-        "attacks_distribution_percentage.png",
-        "dst_ports.png",
-        "protocols.png",
-        "ftp_bruteforce_attacks.png",
-        "ssh_bruteforce_attacks.png",
-        "distribution_of_connections.png",
-        "tcp_flags.png"
+        "attacks_distribution_percentage.png", "dst_ports.png", "protocols.png",
+        "ftp_bruteforce_attacks.png", "ssh_bruteforce_attacks.png",
+        "distribution_of_connections.png", "tcp_flags.png"
     ]
-
     for file_name in image_files:
         img_path = os.path.join("streamlit_app", "images", file_name)
         try:
