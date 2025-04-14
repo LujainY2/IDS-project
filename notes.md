@@ -77,6 +77,7 @@ import requests
 from PIL import Image
 import os
 import base64
+from io import BytesIO
 
 # ------------------- Page Configuration ------------------- #
 st.set_page_config(page_title="Intrusion Detection", layout="wide")
@@ -90,41 +91,48 @@ if "page" not in st.session_state:
 st.markdown("""
 <style>
     .custom-navbar {
-        background-color: #fdf5df;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem 2rem;
-        border-bottom: 1px solid #ccc;
-    }
-    .navbar-title {
-        color: #36162E;
-        font-size: 24px;
-        font-weight: bold;
-        background-color: #fdf5df;
-        padding: 0.4rem 1rem;
-        border-radius: 8px;
-    }
-    .navbar-tabs button {
-        margin-left: 10px;
-        padding: 0.4rem 1rem;
-        border: 2px solid #36162E;
-        background-color: #fdf5df;
-        color: #36162E;
-        font-weight: bold;
-        border-radius: 8px;
-        cursor: pointer;
-    }
-    .navbar-tabs button:hover {
-        background-color: white;
-        color: #36162E;
-    }
+    background-color: #fdf5df;
+    display: flex;
+    align-items: center;
+
+}
+
+.navbar-title {
+    color: #594057;
+    font-size: 20px;
+    background-color: #fdf5df;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    margin-right: 20px; /* space between title and buttons */
+}
+
+.navbar-tabs {
+    display: flex;
+    gap: 1; /* reduce space between buttons */
+    margin-left: 0; /* align buttons more left */
+}
+
+.navbar-tabs button {
+    background-color: #fdf5df;
+    color: #594057;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0; /* remove default spacing */
+}
+
+.navbar-tabs button:hover {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid white;
+    background-color: #594057;
+    color: #fdf5df;
+}
 </style>
 """, unsafe_allow_html=True)
 
 col1, col2, col3, col4 = st.columns([4, 1, 1, 1])
 with col1:
-    st.markdown('<div class="navbar-title">CyberGuard: Smart Security with AI</div>', unsafe_allow_html=True)
+    st.markdown('<div class="navbar-title">CyberGuard: Smart Security with AI 🛡️👁️‍🗨️⚙️</div>', unsafe_allow_html=True)
 with col2:
     if st.button("Main"):
         st.session_state.page = "Main"
@@ -134,6 +142,8 @@ with col3:
 with col4:
     if st.button("Analysis"):
         st.session_state.page = "Analysis"
+
+
 
 # ------------------- Sidebar Background ------------------- #
 def set_sidebar_background(image_path):
@@ -174,9 +184,16 @@ st.markdown("""
         color: #36162E;
         font-weight: bold;
     }
-    h1, h2, h3 {
-        color: #594057;
+    h1 {
+    color: #594057 !important;
+    font-size: 30px !important; ]
+
     }
+    h2, h3 {
+    color: #B14B4B !important;
+    font-size: 23px !important;  
+   }
+
     .stSlider label {
         color: #F56A47;
         font-weight: bold;
@@ -187,38 +204,56 @@ st.markdown("""
     div.stButton > button {
         padding: 0.6rem 1.2rem;
         background-color: #fdf5df;
-        color: #FF6D3F;
+        color: #594057;
         border-radius: 8px;
         cursor: pointer;
-        border: 2px solid #FF6D3F;
+        margin: 0; /* remove default spacing */
+
     }
     div.stButton > button:hover {
-        background-color: #FF6D3F;
-        color: #fff;
-        font-weight: bold;
-        font-size: 16px;
-        transition: 0.3s ease-in-out;
+     padding: 0.6rem 1.2rem;
+    border-bottom: 1px solid white;
+    background-color: #594057;
+    color: #fdf5df;
+ 
     }
 </style>
 """, unsafe_allow_html=True)
 
 # ------------------- Main Page ------------------- #
 if st.session_state.page == "Main":
-    st.markdown("<h1 style='text-align: center;'>🏠 Welcome to the Intrusion Detection System</h1>", unsafe_allow_html=True)
-    st.write("Use the navigation above to explore model classification or analysis.")
-    st.session_state.page = "Main"
+    st.markdown("<h1 style='text-align: center;'>🏠 Welcome to the Intrusion Detection System</h1>",
+                unsafe_allow_html=True)
+    st.markdown("<h2  style='text-align: left; padding-left: 80px;'> Use the navigation above to explore model classification or analysis.</h2>",
+                unsafe_allow_html=True)
     image_path = r"streamlit_app/images/img3.png"
     if os.path.exists(image_path):
         img = Image.open(image_path)
         # Resize while maintaining aspect ratio
-        base_width = 600
-        w_percent = base_width / float(img.size[0])
-        new_height = int(float(img.size[1]) * w_percent)
-        resized_img = img.resize((base_width, new_height))
+        base_height = 450  # adjust height here
+        h_percent = base_height / float(img.size[1])
+        new_width = int(float(img.size[0]) * h_percent)
+        resized_img = img.resize((new_width, base_height))
+        #st.image(resized_img, caption="CyberGuard: Smart Security with AI", use_container_width=False)
 
-        st.image(resized_img, caption="CyberGuard: Smart Security with AI", use_container_width=False)
+        # Convert to base64
+        buffered = BytesIO()
+        resized_img.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+
+        # Center the image using HTML
+        st.markdown(
+            f"""       <div style="text-align: center;">
+                           <img src="data:image/png;base64,{img_str}" width="{new_width}" height="{base_height}">
+                           <p style="color: gray;">CyberGuard: Smart Security with AI</p>
+                       </div>
+                       """,
+            unsafe_allow_html=True
+        )
+
     else:
         st.warning("Main page image not found.")
+
 
 # ------------------- Model Page ------------------- #
 elif st.session_state.page == "Model":
@@ -228,7 +263,7 @@ elif st.session_state.page == "Model":
         "Bwd Pkt Len Mean", "Pkt Len Max", "ECE Flag Cnt",
         "Init Fwd Win Byts", "Init Bwd Win Byts", "Fwd Act Data Pkts"
     ]
-    st.subheader("📊 Select Feature Values")
+    st.markdown("<h2>📊 Select Feature Values</h2>", unsafe_allow_html=True)
     feature_values = []
     for feature in selected_features:
         min_val = float(df[feature].min())
