@@ -82,56 +82,58 @@ import base64
 st.set_page_config(page_title="Intrusion Detection", layout="wide")
 
 # ------------------- Handle Page Switching ------------------- #
-query_params = st.query_params
-page = query_params.get("page", ["Main"])[0]
+# Initialize session state
+if "page" not in st.session_state:
+    st.session_state.page = "Main"
 
-# ------------------- Dynamic Navbar Styling ------------------- #
-main_active = "background-color: white; color: #36162E;" if page == "Main" else ""
-analysis_active = "background-color: white; color: #36162E;" if page == "Analysis" else ""
-
-st.markdown(f"""
-    <style>
-        .custom-navbar {{
-            background-color: #fdf5df;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid #ccc;
-        }}
-        .navbar-title {{
-            color: #36162e;
-            font-size: 24px;
-            font-weight: bold;
-        }}
-        .navbar-tabs button {{
-            margin-left: 10px;
-            padding: 0.6rem 1.2rem;
-            background-color: #fdf5df;
-            color: #36162E;
-            border-radius: 8px;
-        }}
-        .navbar-tabs button:hover {{
-            margin-left: 10px;
-            border: 2px solid white;
-            border-radius: 8px;
-            padding: 0.5em 1em;
-            font-weight: bold;
-            font-size: 16px;
-            transition: 0.3s ease-in-out;
-            backgroud-color:white;
-        }}
-    </style>
-    <div class="custom-navbar">
-        <div class="navbar-title">Intrusion Detection System</div>
-        <div class="navbar-tabs">
-            <form method="get">
-                <button type="submit" name="page" value="Main" style="{main_active}">Main</button>
-                <button type="submit" name="page" value="Analysis" style="{analysis_active}">Analysis</button>
-            </form>
-        </div>
-    </div>
+# Custom Navbar with Buttons using Session State
+st.markdown("""
+<style>
+    .custom-navbar {
+        background-color: #fdf5df;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        border-bottom: 1px solid #ccc;
+    }
+    .navbar-title {
+        color: #36162E;
+        font-size: 24px;
+        font-weight: bold;
+        background-color: #fdf5df;
+        padding: 0.4rem 1rem;
+        border-radius: 8px;
+    }
+    .navbar-tabs button {
+        margin-left: 10px;
+        padding: 0.4rem 1rem;
+        border: 2px solid #36162E;
+        background-color: #fdf5df;
+        color: #36162E;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .navbar-tabs button:hover {
+        background-color: white;
+        color: #36162E;
+    }
+</style>
 """, unsafe_allow_html=True)
+
+col1, col2, col3, col4 = st.columns([4, 1, 1, 1])
+with col1:
+    st.markdown('<div class="navbar-title">CyberGuard: Smart Security with AI</div>', unsafe_allow_html=True)
+with col2:
+    if st.button("Main"):
+        st.session_state.page = "Main"
+with col3:
+    if st.button("Model"):
+        st.session_state.page = "Model"
+with col4:
+    if st.button("Analysis"):
+        st.session_state.page = "Analysis"
 
 # ------------------- Sidebar Background ------------------- #
 def set_sidebar_background(image_path):
@@ -141,72 +143,85 @@ def set_sidebar_background(image_path):
     <style>
         [data-testid="stSidebar"] > div:first-child {{
             background-image: url("data:image/jpeg;base64,{encoded_string}");
-            background-size: cover;
             background-repeat: no-repeat;
-            background-position: center;
-            min-height: 100vh;
-            color:#36162e;
+           background-size: 120% auto;  /* adjust the size here */
+           background-position: center 104%;  /* lower it toward the bottom */
+            min-height: 40vh;
+            color: white;
         }}
     </style>
     """
     st.markdown(sidebar_style, unsafe_allow_html=True)
 
+set_sidebar_background("streamlit_app/images/img2.png")
 
-set_sidebar_background("streamlit_app/images/img.jpeg")
 # Sidebar content
-st.sidebar.markdown("## CyberGuard: Intrusion Detection System using Machine Learning")
-st.sidebar.write("""Key Technologies:
-- **Machine Learning** for classification and threat detection
-- **Docker** for containerization
-- **Streamlit** for interactive web interface (frontend)
-- **fastAPI** for data handling (backend)
-- **Requests** to integrate with backend APIs for predictions
-
-### How It Works:
-- The user selects feature values from the network traffic data.
-- A machine learning model predicts whether the traffic is malicious or normal.
-- The system also provides visual analysis of attack patterns and network traffic characteristics.
+st.sidebar.markdown("## 💻 CyberGuard: Intrusion Detection System using Machine Learning")
+st.sidebar.markdown("""
+This website was developed using:
+- 🐳 Docker  
+- 🔧 Streamlit  
+- 🤖 Scikit-learn  
+- 🌐 FastAPI (for backend API)  
+- 🧠 Machine Learning models (e.g., XGBoost, Random Forest, Decision Tree)
 """)
+
 # ------------------- Custom CSS Styling ------------------- #
 st.markdown("""
-    <style>
-        .stApp {
-            background-color: #fdf5df;
-            color: #36162E;
-            font-weight: bold;
-        }
-        h1, h2, h3 {
-            color: #594057;
-        }
-        .stSlider label {
-            color: #F56A47 ;
-            font-weight: bold ;
-        }
-        .stSlider div[data-baseweb="slider"] > div > div[role="slider"] {
-            background-color: #F56A47 ;
-        }
-        div.stButton > button {
-            padding: 0.6rem 1.2rem;
-            background-color: #fdf5df;
-            color: #36162E;
-            border-radius: 8px;
-            cursor: pointer;
-            border: 2px solid white;
-        }
-        div.stButton > button:hover {
-            background-color: #fdf5df ;
-            color: #36162E ;
-            padding: 0.5em 1em;
-            font-weight: bold;
-            font-size: 16px;
-            transition: 0.3s ease-in-out;
-            border: 2px solid white;
-        }
-    </style>
+<style>
+    .stApp {
+        background-color: #fdf5df;
+        color: #36162E;
+        font-weight: bold;
+    }
+    h1, h2, h3 {
+        color: #594057;
+    }
+    .stSlider label {
+        color: #F56A47;
+        font-weight: bold;
+    }
+    .stSlider div[data-baseweb="slider"] > div > div[role="slider"] {
+        background-color: #F56A47;
+    }
+    div.stButton > button {
+        padding: 0.6rem 1.2rem;
+        background-color: #fdf5df;
+        color: #FF6D3F;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 2px solid #FF6D3F;
+    }
+    div.stButton > button:hover {
+        background-color: #FF6D3F;
+        color: #fff;
+        font-weight: bold;
+        font-size: 16px;
+        transition: 0.3s ease-in-out;
+    }
+</style>
 """, unsafe_allow_html=True)
 
 # ------------------- Main Page ------------------- #
-if page == "Main":
+if st.session_state.page == "Main":
+    st.markdown("<h1 style='text-align: center;'>🏠 Welcome to the Intrusion Detection System</h1>", unsafe_allow_html=True)
+    st.write("Use the navigation above to explore model classification or analysis.")
+    st.session_state.page = "Main"
+    image_path = r"streamlit_app/images/img3.png"
+    if os.path.exists(image_path):
+        img = Image.open(image_path)
+        # Resize while maintaining aspect ratio
+        base_width = 600
+        w_percent = base_width / float(img.size[0])
+        new_height = int(float(img.size[1]) * w_percent)
+        resized_img = img.resize((base_width, new_height))
+
+        st.image(resized_img, caption="CyberGuard: Smart Security with AI", use_container_width=False)
+    else:
+        st.warning("Main page image not found.")
+
+# ------------------- Model Page ------------------- #
+elif st.session_state.page == "Model":
     st.markdown("<h1 style='text-align: center;'>🔐 Intrusion Detection System</h1>", unsafe_allow_html=True)
     df = pd.read_csv("streamlit_app/features.csv")
     selected_features = [
@@ -229,13 +244,13 @@ if page == "Main":
         feature_values.append(value)
 
     if st.button("Classify"):
-            payload = {"features": feature_values}
-            response = requests.post("http://backend:8000/predict", json=payload)
-            result = response.json()
-            st.success(f"The Response from the API = **{result['predicted_class']}**")
+        payload = {"features": feature_values}
+        response = requests.post("http://backend:8000/predict", json=payload)
+        result = response.json()
+        st.success(f"The Response from the API = **{result['predicted_class']}**")
 
 # ------------------- Analysis Page ------------------- #
-elif page == "Analysis":
+elif st.session_state.page == "Analysis":
     st.markdown("<h1 style='text-align: center;'>📊 Analysis</h1>", unsafe_allow_html=True)
     image_files = [
         "attacks_distribution_percentage.png", "dst_ports.png", "protocols.png",
@@ -250,7 +265,6 @@ elif page == "Analysis":
             st.image(img, caption=caption)
         except FileNotFoundError:
             st.warning(f"Image not found: {img_path}")
-
 ```
 
 ### FastAPI at: `localhost:8000` 
