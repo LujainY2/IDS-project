@@ -71,7 +71,7 @@ docker-compose up --build
 ```
 ## 6.🐍 frontend.py
 ```python
-import streamlit as st
+    import streamlit as st
 import pandas as pd
 import requests
 from PIL import Image
@@ -103,23 +103,26 @@ st.markdown("""
     background-color: #fdf5df;
     padding: 0.4rem 1rem;
     border-radius: 8px;
-    margin-right: 20px; /* space between title and buttons */
+    margin-right: 30px; /* space between title and buttons */
+    font-weight:normal;
 }
 
 .navbar-tabs {
     display: flex;
     gap: 1; /* reduce space between buttons */
     margin-left: 0; /* align buttons more left */
+    margin: 0;
 }
 
 .navbar-tabs button {
     background-color: #fdf5df;
     color: #594057;
-    font-weight: bold;
+    font-weight: normal;
     border-radius: 8px;
     cursor: pointer;
-    margin: 0; /* remove default spacing */
+    margin: 0;
 }
+
 
 .navbar-tabs button:hover {
     padding: 1rem 2rem;
@@ -132,7 +135,7 @@ st.markdown("""
 
 col1, col2, col3, col4 = st.columns([4, 1, 1, 1])
 with col1:
-    st.markdown('<div class="navbar-title">CyberGuard: Smart Security with AI 🛡️👁️‍🗨️⚙️</div>', unsafe_allow_html=True)
+    st.markdown('<div class="navbar-title" >CyberGuard: Smart Security with AI 🛡️👁️‍🗨️⚙️</div>', unsafe_allow_html=True)
 with col2:
     if st.button("Main"):
         st.session_state.page = "Main"
@@ -182,21 +185,23 @@ st.markdown("""
     .stApp {
         background-color: #fdf5df;
         color: #36162E;
-        font-weight: bold;
+         font-weight:normal;
     }
-    h1 {
+   h1 {
     color: #594057 !important;
-    font-size: 30px !important; ]
-
-    }
-    h2, h3 {
+    font-size: 30px !important;
+    font-weight: normal !important;
+}
+h2, h3 {
     color: #B14B4B !important;
-    font-size: 23px !important;  
-   }
+    font-size: 23px !important;
+    font-weight: normal !important;
+}
+
 
     .stSlider label {
         color: #F56A47;
-        font-weight: bold;
+     
     }
     .stSlider div[data-baseweb="slider"] > div > div[role="slider"] {
         background-color: #F56A47;
@@ -224,8 +229,10 @@ st.markdown("""
 if st.session_state.page == "Main":
     st.markdown("<h1 style='text-align: center;'>🏠 Welcome to the Intrusion Detection System</h1>",
                 unsafe_allow_html=True)
-    st.markdown("<h2  style='text-align: left; padding-left: 80px;'> Use the navigation above to explore model classification or analysis.</h2>",
-                unsafe_allow_html=True)
+    st.markdown(
+        "<h2 style='text-align: left; padding-left: 80px; font-weight: normal;'>Use the navigation above to explore model classification or analysis.</h2>",
+        unsafe_allow_html=True)
+
     image_path = r"streamlit_app/images/img3.png"
     if os.path.exists(image_path):
         img = Image.open(image_path)
@@ -300,6 +307,7 @@ elif st.session_state.page == "Analysis":
             st.image(img, caption=caption)
         except FileNotFoundError:
             st.warning(f"Image not found: {img_path}")
+
 ```
 
 ### FastAPI at: `localhost:8000` 
