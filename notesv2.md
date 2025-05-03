@@ -580,8 +580,8 @@ div.stButton > button:hover {
     color: #fdf5df;
 }
 ```
-
-
+## Built an docker container 
+* ` docker-compose up --build` 
 ### FastAPI at: `localhost:8000` 
 * `backend` on port 8000
 ### Streamlit UI at: `localhost:8501`
