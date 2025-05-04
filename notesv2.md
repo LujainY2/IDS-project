@@ -296,7 +296,7 @@ style_path = os.path.join(os.path.dirname(__file__), "style.css")
 with open(style_path) as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-
+@st.cache_data
 def unzip_selected_files(zip_path='datasets/archive.zip', extract_to='datasets/extracted'):
     selected_files = ['03-02-2018.csv', '03-01-2018.csv', '02-23-2018.csv', '02-14-2018.csv']
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
@@ -311,7 +311,7 @@ def get_clean_data():
         'datasets/extracted/02-23-2018.csv',
         'datasets/extracted/02-14-2018.csv',
     ]
-    dataset_list = [pd.read_csv(path, low_memory=False, nrows=25000) for path in file_paths]
+    dataset_list = [pd.read_csv(path, low_memory=False,nrows=25000) for path in file_paths]
     df = pd.concat(dataset_list, ignore_index=True)
     df = df[df["Protocol"] != "Protocol"]
     df = df.drop(columns=["Timestamp", "Dst Port"], errors='ignore')
@@ -327,6 +327,11 @@ def get_clean_data():
     df = df.drop_duplicates()
     df.replace([np.inf, -np.inf], np.nan, inplace=True)
     df.fillna(df.median(numeric_only=True), inplace=True)
+
+    # balance taken sample in terms of classes
+    df_mal = df[df['Label'] == 1]
+    df_ben = df[df['Label'] == 0].sample(n=len(df_mal), random_state=42)
+    df = pd.concat([df_mal, df_ben]).sample(frac=1, random_state=42).reset_index(drop=True)
     return df
 
 def radar_df():
@@ -336,7 +341,7 @@ def radar_df():
         'datasets/extracted/03-01-2018.csv',
         'datasets/extracted/02-23-2018.csv',
         'datasets/extracted/02-14-2018.csv']
-    df = pd.concat([pd.read_csv(path, low_memory=False, nrows=25000) for path in file_paths], ignore_index=True)
+    df = pd.concat([pd.read_csv(path, low_memory=False,nrows=25000) for path in file_paths], ignore_index=True)
     df = df.dropna()
     df['AttackType'] = df['Label'].apply(lambda x: 'Benign' if x == 'Benign' else 'Malicious')
     features = ['Bwd Pkt Len Max', 'Bwd Pkt Len Mean', 'Bwd Pkt Len Std', 'Pkt Len Std',
@@ -359,7 +364,7 @@ def radar_df():
     radar_df = radar_df.set_index('feature').T
     return radar_df, scaler
 
-
+@st.cache_data
 def get_radar_chart(radar_df, input_scaled_dict=None):
     fig = go.Figure()
 
