@@ -1,5 +1,10 @@
 # FastAPI + Streamlit + Docker
 FastAPI backend & streamlit frontend run using docker-compose
+
+## 📷 App Preview
+![App Screenshot](streamlit_app/images/your_image.png)
+
+
 ## 1.✅ Project Structure
 ```bash  
 myproject/
