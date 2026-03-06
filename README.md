@@ -1,5 +1,6 @@
-# FastAPI + Streamlit + Docker
-FastAPI backend & streamlit frontend run using docker-compose
+# FastAPI + Streamlit + MongoDB + Docker
+
+FastAPI backend, Streamlit frontend, and MongoDB database running together using Docker Compose.
 
 ## 📷 App Preview
 ![App Screenshot](img1.png)
