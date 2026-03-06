@@ -40,7 +40,7 @@ Mongo Express UI (9090)
 
 # 📷 Application Preview
 
-![App Screenshot](images/img1.png)
+![App Screenshot](app/images/img1.png)
 ![App Screenshot](images/img2.png)
 ![App Screenshot](images/img3.png)
 ![App Screenshot](images/img4.png)
