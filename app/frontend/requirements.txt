@@ -1,0 +1,5 @@
+streamlit
+streamlit-navigation-bar
+Pillow
+requests
+plotly

@@ -1,0 +1,44 @@
+services:
+
+  backend:
+    build: ./backend
+    container_name: ids-backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: ids-frontend
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    restart: always
+
+  mongodb:
+    image: mongo:7
+    container_name: ids-mongodb
+    ports:
+      - "27018:27017"
+    env_file:
+      - ./mongodb/.env
+    volumes:
+      - mongodb-data:/data/db
+    restart: unless-stopped
+
+  mongo-express:
+    image: mongo-express
+    container_name: ids-mongo-express
+    ports:
+      - "9090:8081"
+    env_file:
+      - ./mongo-express/.env
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+volumes:
+  mongodb-data:

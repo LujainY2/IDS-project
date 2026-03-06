@@ -1,0 +1,24 @@
+/* Dark Theme */
+.stApp {
+    background-color: #1E1E1E;
+    color: #E0E0E0;
+    font-weight: normal;
+}
+
+div.stChatMessage {
+    background-color: #2A2A2A;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    color: #E0E0E0 !important;
+}
+
+div.stChatMessage[data-testid="chat-message-human"] {
+    background-color: #333333;
+    color: #F0F0F0 !important;
+}
+
+div.stChatMessage[data-testid="chat-message-ai"] {
+    background-color: #2A2A2A;
+    color: #66CCFF !important;
+}

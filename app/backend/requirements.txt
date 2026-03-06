@@ -1,0 +1,34 @@
+# Core ML and Data
+scikit-learn==1.2.2
+xgboost==2.0.3
+numpy==1.23.5
+pandas
+scipy
+joblib
+
+# Web backend
+fastapi
+uvicorn
+python-multipart
+pydantic
+jinja2
+python-dotenv
+requests
+
+# Database
+pymongo
+
+# Visualization if backend uses them
+matplotlib
+plotly==5.20.0
+
+# AI tools
+langchain
+langchain-community
+langchain-core
+langchain-openai
+ollama
+click
+
+# Document generation
+python-pptx
