@@ -81,8 +81,33 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - backend
+      - mongodb
     restart: always
+
+  mongodb:
+    image: mongo:7.0.12
+    container_name: tasktracker-mongodb
+    ports:
+      - "27018:27017"
+    env_file:
+      - ./mongodb/.env
+    volumes:
+      - mongodb-data:/data/db
+    restart: unless-stopped
+
+  mongo-express:
+    image: mongo-express:1.0.2
+    container_name: tasktracker-mongo-express
+    ports:
+      - "9090:8081"
+    env_file:
+      - ./mongo-express/.env
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+volumes:
+  mongodb-data:
 
 ```
 
