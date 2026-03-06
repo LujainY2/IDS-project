@@ -55,21 +55,6 @@ Mongo Express UI (9090)
 ![App Screenshot](app/images/img12.png)
 ![App Screenshot](app/images/img13.png)
 ![App Screenshot](app/images/img14.png)
-=======
-![App Screenshot](images/img2.png)
-![App Screenshot](images/img3.png)
-![App Screenshot](images/img4.png)
-![App Screenshot](images/img5.png)
-![App Screenshot](images/img6.png)
-![App Screenshot](images/img7.png)
-![App Screenshot](images/img8.png)
-![App Screenshot](images/img9.png)
-![App Screenshot](images/img10.png)
-![App Screenshot](images/img11.png)
-![App Screenshot](images/img12.png)
-![App Screenshot](images/img13.png)
-![App Screenshot](images/img14.png)
->>>>>>> 2074d881b8600fdbf212d276051f05048d489a84
 
 ---
 
